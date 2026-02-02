@@ -38,7 +38,7 @@
 ### 构建
 
 ```bash
-git clone https://github.com/gupingan6/hardware-master.git
+git clone https://github.com/gupingan/hardware-master.git
 cd hardware-master
 cargo build --release
 ```
@@ -81,4 +81,4 @@ hardware-master/
 
 ---
 
-Made with ❤️ by [gupingan6](https://github.com/gupingan6)
+Made with ❤️ by [gupingan](https://github.com/gupingan)
