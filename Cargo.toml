@@ -1,0 +1,62 @@
+[package]
+build = "build.rs"
+edition = "2021"
+name = "hardware-master"
+version = "0.1.0"
+
+[build-dependencies]
+# 资源嵌入
+embed-resource = "1.5.1"
+
+[dependencies]
+# GUI 框架
+eframe = "0.28"
+egui = "0.28"
+
+# 作用域
+scopeguard = "*"
+
+# 图片
+image = "0.25.2"
+
+# 日志
+env_logger = "0.11.8"
+log = "0.4.29"
+
+# 获取系统信息
+sysinfo = "0.37.2"
+
+# Windows API
+windows = {version = ">=0.62, <0.63", features = [
+  "Win32_Devices",
+  "Win32_Devices_DeviceAndDriverInstallation",
+  "Win32_Foundation",
+  "Win32_Media_KernelStreaming",
+  "Win32_Security",
+  "Win32_Storage_FileSystem",
+  "Win32_System_Com",
+  "Win32_System_IO",
+  "Win32_System_Ioctl",
+  "Win32_System_Ole",
+  "Win32_System_Power",
+  "Win32_System_Registry",
+  "Win32_System_Rpc",
+  "Win32_System_SystemServices",
+  "Win32_System_SystemInformation",
+  "Win32_System_Variant",
+  "Win32_System_WindowsProgramming",
+  "Win32_System_Wmi",
+  "Win32_Graphics_Dxgi",
+]}
+
+# Windows 注册表访问
+winreg = "0.52"
+
+# 错误处理
+thiserror = "1.0"
+
+[profile.release]
+codegen-units = 1 
+lto = true 
+opt-level = 2 # 快速而合理的优化
+strip = true
