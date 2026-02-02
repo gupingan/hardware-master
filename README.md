@@ -1,6 +1,7 @@
 <p align="center">
-  <img src="https://gitee.com/xiaogugyx/drawing-bed/raw/master/hardware-master-logo.png" alt="Hardware Master" width="66%">
+  <img src="docs/logo.png" alt="Hardware Master" width="66%">
 </p>
+
 
 
 <p align="center">
