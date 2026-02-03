@@ -2,6 +2,7 @@
 build = "build.rs"
 edition = "2021"
 name = "hardware-master"
+authors = ["gupingan <gupingan6@outlook.com>"]
 version = "0.1.0"
 
 [build-dependencies]
