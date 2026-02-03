@@ -32,7 +32,7 @@ use windows::core::PWSTR;
 /// assert_eq!(trimmed, vec![72, 101, 108, 108, 111]); // 仅保留 Hello
 ///
 /// // 示例 2: 保留中间的 0
-/// let data: Vec<u32> = vec![1, 0, 2, 3, 0, 0]; 
+/// let data: Vec<u32> = vec![1, 0, 2, 3, 0, 0];
 /// let trimmed = _trim_zeros(&data);
 /// assert_eq!(trimmed, vec![1, 0, 2, 3]); // 末尾两个0被移除，中间的0保留
 ///
@@ -85,7 +85,6 @@ pub fn u8_slice_to_string(v: &[u8]) -> String {
     String::from_utf8_lossy(&trimmed).into_owned()
 }
 
-
 /// 小端序数据转换字符串，Windows 下理论上安全
 ///
 /// 该函数用于处理 Windows API 返回的 UTF-16 字符串数据，
@@ -95,10 +94,10 @@ pub fn u8_slice_to_string(v: &[u8]) -> String {
 ///
 /// 示例
 /// ```
-/// use hardware_master::utils::string::u16_bytes_to_string_lossy;
+/// use hardware_master::utils::string::u16_bytes_to_string;
 /// // UTF-16 编码的 "Hello" + null
 /// let data: Vec<u8> = vec![0x48, 0x00, 0x65, 0x00, 0x6C, 0x00, 0x6C, 0x00, 0x6F, 0x00, 0x00, 0x00];
-/// assert_eq!(u16_bytes_to_string_lossy(&data), "Hello");
+/// assert_eq!(u16_bytes_to_string(&data), "Hello");
 /// ```
 pub fn u16_bytes_to_string(bytes: &[u8]) -> String {
     if bytes.len() % 2 != 0 {
@@ -127,7 +126,6 @@ pub fn wide_str(s: &str) -> Vec<u16> {
     s.encode_utf16().chain(std::iter::once(0)).collect()
 }
 
-
 /// 从 PWSTR 指针读取字符串
 ///
 /// * `pwstr` - 指向以 null 结尾的 UTF-16 字符串的指针
@@ -153,4 +151,15 @@ pub unsafe fn pwstr_to_string(pwstr: PWSTR) -> String {
     let len = (0..).take_while(|&i| *pwstr.0.offset(i) != 0).count();
     let slice = std::slice::from_raw_parts(pwstr.0, len);
     OsString::from_wide(slice).to_string_lossy().into_owned()
+}
+
+/// 格式化
+pub fn format_size(size: f64) -> String {
+    const UNITS: &[&str] = &["B", "KB", "MB", "GB", "TB", "PB"];
+    if size <= 0.0 {
+        return "0 B".to_string();
+    }
+    let exp = size.log(1024.0).min(UNITS.len() as f64 - 1.0) as usize;
+    let value = size as f64 / 1024f64.powi(exp as i32);
+    format!("{:.0} {}", value, UNITS[exp])
 }

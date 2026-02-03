@@ -44,13 +44,20 @@ cd hardware-master
 cargo build --release
 ```
 
+构建完成后，可执行文件位于 `target/release/hardware-master.exe`
+
 ### 运行
 
 ```bash
+cargo build
 cargo run
 ```
 
-构建完成后，可执行文件位于 `target/release/hardware-master.exe`
+### 测试
+
+```bash
+cargo test -- --nocapture
+```
 
 ## 技术栈
 

@@ -12,24 +12,9 @@
 macro_rules! impl_detect_method {
     ($name:ident, $field:ident, $module:ident, $detect_fn:ident, $error_variant:ident) => {
         fn $name(&mut self) -> Result<(), DetectionError> {
-            self.$field = $module::$detect_fn()
-                .map_err(|e| DetectionError::$error_variant(e.to_string()))?;
+            self.$field =
+                $module::$detect_fn().map_err(|e| DetectionError::$error_variant(e.to_string()))?;
             Ok(())
-        }
-    };
-}
-
-/// 宏：格式化字节大小
-#[macro_export]
-macro_rules! format_mb_size {
-    ($size:expr) => {
-        if ($size as f64) < crate::constants::MEMORY_THRESHOLD_MB {
-            format!("{:.} MB", $size)
-        } else {
-            format!(
-                "{:.0} GB",
-                f64::round($size as f64 / crate::constants::MEMORY_THRESHOLD_MB)
-            )
         }
     };
 }

@@ -19,8 +19,8 @@ use windows::Win32::System::IO::DeviceIoControl;
 pub struct DiskInfo {
     /// 磁盘名称，如：(标准磁盘驱动器) PCIe-8 SSD 1TB
     pub model: String,
-    /// 总容量 (MB)
-    pub total_capacity: u64,
+    /// 总容量 (B)
+    pub total_capacity: f64,
     /// 磁盘类型
     pub disk_type: DiskType,
 }
@@ -29,7 +29,7 @@ impl Default for DiskInfo {
     fn default() -> Self {
         Self {
             model: String::from("未知"),
-            total_capacity: 0,
+            total_capacity: 0.0,
             disk_type: DiskType::Unknown,
         }
     }
@@ -61,7 +61,7 @@ pub fn detect_disk() -> Result<DiskInfo, DetectionError> {
         let (model, total_capacity, disk_type) = get_disk_info(0)?;
         Ok(DiskInfo {
             model,
-            total_capacity: total_capacity / (1024 * 1024),
+            total_capacity: total_capacity as f64,
             disk_type,
         })
     }

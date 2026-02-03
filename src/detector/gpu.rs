@@ -1,7 +1,6 @@
 use crate::detector::DetectionError;
 use crate::iddb;
 use crate::utils;
-use crate::constants::BYTES_PER_MB;
 use windows::Win32::Graphics::Dxgi::{
     CreateDXGIFactory1, IDXGIAdapter1, IDXGIFactory1, DXGI_ADAPTER_FLAG_SOFTWARE,
     DXGI_ERROR_NOT_FOUND,
@@ -31,7 +30,7 @@ pub struct Gpu {
     pub chip_vendor: String,
     /// 显卡类型
     pub gpu_type: GpuType,
-    /// 显存大小 (MB)
+    /// 显存大小 (B)
     pub vram_size: f64,
     /// 显卡 ID
     pub device_id: String,
@@ -121,7 +120,7 @@ pub fn detect_gpu() -> Result<GpuInfo, DetectionError> {
                 };
                 let chip_vendor = get_vendor_by_id("PCI", &vendor_id);
                 let gpu_type = get_gpu_type(&description, &vendor_id);
-                let vram_size = desc.DedicatedVideoMemory as f64 / BYTES_PER_MB;
+                let vram_size = desc.DedicatedVideoMemory as f64;
 
                 let gpu = Gpu {
                     description,

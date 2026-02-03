@@ -1,6 +1,6 @@
 use crate::detector::DEBOUNCE_DURATION_SECS;
 use crate::detector::{gpu::GpuType, HardwareDetector};
-use crate::format_mb_size;
+use crate::utils::string::format_size;
 use eframe::egui;
 use std::sync::{mpsc, Arc, Mutex};
 use std::time::{Duration, Instant};
@@ -130,7 +130,7 @@ impl HardwareMasterApp {
                 "{}: {} ({}, {})\n",
                 gpu.gpu_type.to_string(),
                 gpu.description,
-                format_mb_size!(gpu.vram_size),
+                format_size(gpu.vram_size),
                 gpu.manufacturer
             ));
         }
@@ -151,7 +151,7 @@ impl HardwareMasterApp {
         text.push_str(&format!("显示器: {}\n", detector.monitor_info.name));
 
         // 硬盘
-        let memory_capacity = format_mb_size!(detector.disk_info.total_capacity);
+        let memory_capacity = format_size(detector.disk_info.total_capacity);
         text.push_str(&format!(
             "主硬盘:({}) {} ({} / {})\n",
             detector.disk_info.disk_type.to_string(),
@@ -227,7 +227,7 @@ impl HardwareMasterApp {
                     {
                         continue;
                     }
-                    let vram_size_str = format_mb_size!(gpu.vram_size);
+                    let vram_size_str = format_size(gpu.vram_size);
                     ui.label(format!("{}:", gpu.gpu_type.to_string()));
                     ui.label(format!(
                         "{} ({}, {})",
@@ -257,9 +257,9 @@ impl HardwareMasterApp {
 
                 ui.label("主硬盘:");
                 ui.label(format!(
-                    "{} ({} GB, {})",
+                    "{} ({}, {})",
                     &detector.disk_info.model,
-                    &detector.disk_info.total_capacity / 1024,
+                    format_size(detector.disk_info.total_capacity),
                     &detector.disk_info.disk_type.to_string(),
                 ));
                 ui.end_row();

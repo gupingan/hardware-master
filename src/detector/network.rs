@@ -48,13 +48,6 @@ pub fn detect_network() -> Result<NetworkInfo, DetectionError> {
                 false
             };
 
-            // 获取网络启用状态
-            let net_enabled = if let Ok(var) = wmi::get_property(&obj, "NetEnabled") {
-                wmi::variant_to_bool(&var).unwrap_or(false)
-            } else {
-                false
-            };
-
             // 获取 PnP 设备 ID
             let pnp_device_id = if let Ok(var) = wmi::get_property(&obj, "PNPDeviceID") {
                 wmi::variant_to_string(&var)
@@ -78,7 +71,6 @@ pub fn detect_network() -> Result<NetworkInfo, DetectionError> {
 
             // 只处理物理 PCI 适配器
             let is_physical = physical_adapter
-                && net_enabled
                 && pnp_device_id.as_deref().map(|p| p.starts_with("PCI")) == Some(true);
 
             if !is_physical {

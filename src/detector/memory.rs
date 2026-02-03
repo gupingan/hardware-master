@@ -1,8 +1,6 @@
 use crate::detector::DetectionError;
-use crate::format_mb_size;
-use crate::utils::wmi;
-use crate::constants::BYTES_PER_MB;
-use std::collections::HashMap;
+use crate::utils::{string, wmi};
+use std::collections::BTreeMap;
 use windows::Win32::System::Wmi::IWbemClassObject;
 
 /// 内存信息
@@ -10,7 +8,7 @@ use windows::Win32::System::Wmi::IWbemClassObject;
 pub struct MemoryInfo {
     /// 内存条信息名称
     pub name: String,
-    /// 总内存大小 (MB)
+    /// 总内存大小 (B)
     pub total_memory: f64,
     /// 内存插槽信息
     pub slots: Vec<MemorySlot>,
@@ -31,7 +29,7 @@ impl Default for MemoryInfo {
 pub struct MemorySlot {
     /// 内存条名称
     pub name: String,
-    /// 容量 (MB)
+    /// 容量 (B)
     pub capacity: f64,
     /// 制造商
     pub manufacturer: String,
@@ -59,8 +57,8 @@ pub fn detect_memory() -> Result<MemoryInfo, DetectionError> {
 
     unsafe {
         let config = wmi::WmiConfig::default();
-        let client = wmi::WmiClient::connect(&config)
-            .map_err(|e| DetectionError::MemoryError(e))?;
+        let client =
+            wmi::WmiClient::connect(&config).map_err(|e| DetectionError::MemoryError(e))?;
 
         let mut enumerator = client
             .query("SELECT * FROM Win32_PhysicalMemory")
@@ -86,7 +84,7 @@ unsafe fn parse_memory_object(obj: &IWbemClassObject) -> Option<MemorySlot> {
     // 获取 Capacity 属性
     if let Ok(var) = wmi::get_property(obj, "Capacity") {
         if let Some(capacity) = wmi::variant_to_u64(&var) {
-            slot.capacity = capacity as f64 / BYTES_PER_MB; // 转换为 MB
+            slot.capacity = capacity as f64;
         }
     }
 
@@ -127,7 +125,7 @@ unsafe fn parse_memory_object(obj: &IWbemClassObject) -> Option<MemorySlot> {
         }
     };
 
-    let capacity = format_mb_size!(slot.capacity);
+    let capacity = string::format_size(slot.capacity);
 
     // 生成名称
     slot.name = format!(
@@ -182,7 +180,7 @@ fn parse_memory_type(mem_type: u32) -> String {
 
 /// 根据内存插槽生成总名称
 pub fn generate_total_name(slots: &[MemorySlot]) -> String {
-    let mut name_counts = HashMap::new();
+    let mut name_counts = BTreeMap::new();
     let mut total_capacity = 0.0;
 
     // 单次遍历同时计数和求和容量
@@ -197,7 +195,7 @@ pub fn generate_total_name(slots: &[MemorySlot]) -> String {
         .map(|(name, count)| format!("{} x {}", name, count))
         .collect();
 
-    let names_str = name_parts.join(" ");
+    let names_str = name_parts.join("  ");
 
-    format!("{} ({})", format_mb_size!(total_capacity), names_str)
+    format!("{} ({})", string::format_size(total_capacity), names_str)
 }
