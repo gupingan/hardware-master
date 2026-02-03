@@ -1,7 +1,11 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use eframe::egui;
 use egui::IconData;
-use hardware_master::{ui::HardwareMasterApp, NAME, constants::{WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT}};
+use hardware_master::{
+    constants::{WINDOW_HEIGHT, WINDOW_MIN_HEIGHT, WINDOW_MIN_WIDTH, WINDOW_WIDTH},
+    ui::HardwareMasterApp,
+    NAME, VERSION,
+};
 use image;
 use log::LevelFilter;
 
@@ -37,7 +41,10 @@ fn main() -> Result<(), eframe::Error> {
 
     // 运行应用程序
     eframe::run_native(
-        "硬大师 - 硬件概要信息获取 (数据仅供参考, 仅用于学习使用)",
+        &format!(
+            "硬大师 v{} - 硬件概要信息获取 (数据仅供参考, 仅用于学习使用)",
+            VERSION
+        ),
         options,
         Box::new(|cc| Ok(Box::new(HardwareMasterApp::new(cc)))),
     )

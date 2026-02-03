@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="docs/logo.png" alt="Hardware Master" width="66%">
+  <img src="docs/imgs/logo.png" alt="Hardware Master" width="66%">
 </p>
-
-
 
 <p align="center">
   基于 Rust 开发的轻量级 Windows 硬件信息检测工具
@@ -20,6 +18,8 @@
 ## 简介
 
 硬大师是一款使用 Rust 编写的 Windows 硬件信息检测工具，通过 WMI 接口获取系统硬件信息，使用 egui 构建原生 GUI 界面。项目设计简洁，代码结构清晰，适合学习 Rust 系统编程和 Windows API 调用。
+
+![窗口图片](docs/imgs/main.png)
 
 ## 特性
 
@@ -61,17 +61,17 @@ cargo test -- --nocapture
 
 ## 技术栈
 
-| 类别 | 技术 |
-|------|------|
-| **语言** | Rust 2021 Edition |
-| **GUI 框架** | [egui](https://github.com/emilk/egui) |
-| **硬件检测** | Windows WMI API |
+| 类别         | 技术                                                 |
+| ------------ | ---------------------------------------------------- |
+| **语言**     | Rust 2021 Edition                                    |
+| **GUI 框架** | [egui](https://github.com/emilk/egui)                |
+| **硬件检测** | Windows WMI API                                      |
 | **系统信息** | [sysinfo](https://github.com/GuillaumeGomez/sysinfo) |
-| **错误处理** | [thiserror](https://github.com/dtolnay/thiserror) |
+| **错误处理** | [thiserror](https://github.com/dtolnay/thiserror)    |
 
 ## 项目结构
 
-```
+````
 hardware-master/
 ├── src/
 │   ├── detector/       # 硬件检测模块
@@ -81,12 +81,12 @@ hardware-master/
 │   └── assets/        # 资源文件
 ├── doc/               # 项目文档
 └── Cargo.toml
-```
+````
 
 ## 许可证
 
 本项目采用 [MIT License](LICENSE) 开源协议。
 
----
+***
 
 Made with ❤️ by [gupingan](https://github.com/gupingan)
